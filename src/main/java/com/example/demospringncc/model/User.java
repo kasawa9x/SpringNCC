@@ -3,46 +3,46 @@ package com.example.demospringncc.model;
 import lombok.Data;
 
 import javax.persistence.*;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotEmpty;
-import java.util.List;
+import java.util.Collection;
 
 @Entity
 @Data
-@Table(name = "users")
+@Table(name = "user", uniqueConstraints = @UniqueConstraint(columnNames = "email"))
 public class User {
+
+    protected User() {
+    }
+    public User(String firstName, String lastName, String email, String password, Collection<Role> roles) {
+        super();
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.password = password;
+        this.roles = roles;
+
+    }
     @Id
-    @GeneratedValue(strategy =  GenerationType.AUTO)
-    private Integer id;
-
-    @NotEmpty
-    @Column(nullable = false)
-    private  String firtName;
-
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "user_id")
+    private Long id;
+    @Column(name = "first_name")
+    private String firstName;
+    @Column(name = "last_name")
     private String lastName;
-    @Column(nullable = false, unique = true)
-    @NotEmpty
-    @Email(message = "{errors.invali}")
+    @Column(name = "email")
     private String email;
-    @NotEmpty
-    private  String password;
-    @ManyToMany(cascade = CascadeType.MERGE, fetch =  FetchType.EAGER)
+    @Column(name = "password")
+    private String password;
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(
-            name = "user_role",
-            joinColumns = {@JoinColumn( name = "USER_ID", referencedColumnName = "ID")},
-            inverseJoinColumns = {@JoinColumn(name = "ROLE_ID", referencedColumnName = "ID")}
-    )
-    private List<Role> roles;
+            name = "users_roles",
+            joinColumns = @JoinColumn(
+                    name = "user_id", referencedColumnName = "user_id"),
+            inverseJoinColumns = @JoinColumn(
+                    name = "role_id", referencedColumnName = "role_id"))
+    private Collection <Role> roles;
 
-    public User(User user) {
 
-        this.firtName = user.getFirtName();
-        this.lastName = user.getLastName();
-        this.email = user.getEmail();
-        this.password = user.getPassword();
-        this.roles = user.getRoles();
-    }
 
-    public User() {
-    }
+
 }

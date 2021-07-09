@@ -3,19 +3,40 @@ package com.example.demospringncc.model;
 import lombok.Data;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotEmpty;
-import java.util.List;
 
 @Entity
 @Data
-@Table(name = "roles")
+@Table(name = "role")
 public class Role {
+//    public Role() {
+//
+//    }
+//    public Role(String name) {
+//        super();
+//        this.name =name;
+//    }
+
     @Id
-    @GeneratedValue(strategy =  GenerationType.AUTO)
-    private  Integer id;
-    @Column(nullable = false, unique = true)
-    @NotEmpty
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "role_id")
+    private Long id;
+
+//    public Long getId() {
+//        return id;
+//    }
+//    public void setId(Long id) {
+//        this.id = id;
+//    }
+
+
+    @Column(name="name")
     private String name;
-    @ManyToMany(mappedBy = "roles")
-    private List<User> user ;
+//    public String getName() {
+//        return name;
+//    }
+//    public void setName(String name) {
+//        this.name = name;
+//    }
+
+    // other getters and setters are hidden for brevity
 }

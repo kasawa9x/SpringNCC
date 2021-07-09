@@ -1,10 +1,13 @@
 package com.example.demospringncc.controller;
 
 import com.example.demospringncc.dto.ProductDTO;
+import com.example.demospringncc.dto.UserDTO;
 import com.example.demospringncc.model.Category;
 import com.example.demospringncc.model.Product;
+import com.example.demospringncc.model.User;
 import com.example.demospringncc.service.CategoryService;
 import com.example.demospringncc.service.ProductService;
+import com.example.demospringncc.service.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -25,6 +28,8 @@ public class AdminController {
     CategoryService categoryService;
     @Autowired
     ProductService productService;
+    @Autowired
+    UserServiceImpl userService;
     @GetMapping("/admin")
     public  String adminHome(){
         return "adminHome";
@@ -103,7 +108,7 @@ public class AdminController {
         return "redirect:/admin/products";
     }
     @GetMapping("/admin/product/update/{id}")
-    public  String uodateProductById(@PathVariable long id,Model model){
+    public  String updateProductById(@PathVariable long id,Model model){
             Product product = productService.getProductyById(id).get();
             ProductDTO productDTO = new ProductDTO();
             productDTO.setId(product.getId());
@@ -117,5 +122,16 @@ public class AdminController {
             model.addAttribute("categories",categoryService.getAllCategory());
             model.addAttribute("productDTO",productDTO);
             return "productsAdd";
+    }
+
+    @GetMapping("/user/{id}")
+    public  String UserInfor(@PathVariable long id,Model model){
+        User user = userService.getUserById(id).get();
+        UserDTO userDTO = new UserDTO();
+        userDTO.setUserName(user.getEmail());
+        userDTO.setFirstName(user.getFirstName());
+        userDTO.setLastName(user.getLastName());
+        model.addAttribute("userDTO",userDTO);
+        return "userInfor";
     }
 }
